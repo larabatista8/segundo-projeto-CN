@@ -10,23 +10,25 @@
             <h2>Integração Numérica</h2>
             <div class="form-integracao">
                 <p>Intervalo:</p>
-                <label for="x0">x0:</label>
-                <input type="number" id="x0"  required>
                 <label for="x1">x1:</label>
                 <input type="number" id="x1"  required>
+                <label for="x5">x5:</label>
+                <input type="number" id="x5"  required>
                 <p>Valores de f(x):</p>
-                <label for="fx0">f(x0):</label>
-                <input type="number" id="fx0"  required>
-                <label for="fx0">f(x1):</label>
+                <label for="fx1">f(x1):</label>
                 <input type="number" id="fx1"  required>
-                <label for="fx0">f(x2):</label>
+                <label for="fx2">f(x2):</label>
                 <input type="number" id="fx2"  required>
-                <label for="fx0">f(x3):</label>
+                <label for="fx3">f(x3):</label>
                 <input type="number" id="fx3"  required>
+                <label for="fx4">f(x4):</label>
+                <input type="number" id="fx4"  required>
+                <label for="fx5">f(x5):</label>
+                <input type="number" id="fx5"  required>
                 <div class="botoes">
                 <button type="button" onclick="trapezio()">Trapézio</button>
-                <button type="button" onclick="">Simpson</button>
-                <button type="button" onclick="">Limpar</button>
+                <button type="button" onclick="simpson()">Simpson</button>
+                <button type="button" onclick="limparinteg()">Limpar</button>
                 </div>
                 <div class="resultado-integracao">
                     <p id="resultado-trapezio"></p>
@@ -40,28 +42,73 @@
         <script>
             function trapezio(){
                 // salvando entradas do usuario
-                let x0 = document.getElementById("x0").value;
                 let x1 = document.getElementById("x1").value;
-                let fx0 = document.getElementById("fx0").value;
+                let x5 = document.getElementById("x5").value;
                 let fx1 = document.getElementById("fx1").value;
                 let fx2 = document.getElementById("fx2").value;
                 let fx3 = document.getElementById("fx3").value;
+                let fx4 = document.getElementById("fx4").value;
+                let fx5 = document.getElementById("fx5").value;
 
                 // convertendo numeros para float
-                x0 = parseFloat(x0);
                 x1 = parseFloat(x1);
-                fx0 = parseFloat(fx0);
+                x5 = parseFloat(x5);
                 fx1 = parseFloat(fx1);
                 fx2 = parseFloat(fx2);
                 fx3 = parseFloat(fx3);
+                fx4 = parseFloat(fx4);
+                fx5 = parseFloat(fx5);
                 
                 // calculando integral
-                let h = (x1-x0)/4.0;
-                let integral= (h/2.0)*(fx0+(2*fx1)+ (2*fx2)+fx3);
+                let h = (x5-x1)/4.0;
+                let integral= (h/2.0)*(fx1+(2*fx2)+(2*fx3)+(2*fx4)+fx5);
 
                 // exibindo resultado
                 let resultado = document.getElementById("resultado-trapezio");
                 resultado.textContent = "Resultado pela regra do Trapézio: " + integral;
+
+            }
+
+            function simpson(){
+
+                // salvando entradas do usuario
+                let x1 = document.getElementById("x1").value;
+                let x5 = document.getElementById("x5").value;
+                let fx1 = document.getElementById("fx1").value;
+                let fx2 = document.getElementById("fx2").value;
+                let fx3 = document.getElementById("fx3").value;
+                let fx4 = document.getElementById("fx4").value;
+                let fx5 = document.getElementById("fx5").value;
+
+                // convertendo numeros para float
+                x1 = parseFloat(x1);
+                x5 = parseFloat(x5);
+                fx1 = parseFloat(fx1);
+                fx2 = parseFloat(fx2);
+                fx3 = parseFloat(fx3);
+                fx4 = parseFloat(fx4);
+                fx5 = parseFloat(fx5);
+                
+                // calculando integral
+                let h = (x5-x1)/4.0;
+                let integral= (h/3.0)*(fx1+(4*fx2)+(2*fx3)+(4*fx4)+fx5);
+
+                // exibindo resultado
+                let resultado = document.getElementById("resultado-simpson");
+                resultado.textContent = "Resultado pela regra de Simpson: " + integral;
+
+            }
+
+            function limparinteg(){
+            document.getElementById("x1").value='';
+            document.getElementById("x5").value='';
+            document.getElementById("fx1").value='';
+            document.getElementById("fx2").value='';
+            document.getElementById("fx3").value='';
+            document.getElementById("fx4").value='';
+            document.getElementById("fx5").value='';
+            document.getElementById("resultado-trapezio").textContent='';
+            document.getElementById("resultado-simpson").textContent='';
 
             }
         </script>
