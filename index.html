@@ -12,12 +12,12 @@
 <br><br>    <input type="number" id="a21" required>.x +  <input type="number" id="a22" required>.y+  <input type="number" id="a23" required>.z =  <input type="number" id="a24" required> 
 <br><br>    <input type="number" id="a31" required>.x +  <input type="number" id="a32" required>.y+  <input type="number" id="a33" required>.z =  <input type="number" id="a34" required> 
             <div class="botoes">
-                <button type="button" onclick="">Calcular</button>
-                <button type="button" onclick="">Limpar</button>
+                <button type="button" onclick="executaGauss()">Calcular</button>
+                <button type="button" onclick="limparGuass()">Limpar</button>
             </div>
             <div class="resultado-metodo-direto">
-                <p id=""></p>
-                <p id=""></p>
+                <p id="mensagem-erro-gauss"></p>
+                <p id="resultado-gauss"></p>
 
             </div>
         </section>
@@ -54,6 +54,8 @@
             </div>
 
         </section>
+
+        <script src="gauss.js"></script>
 
         <script>
             function trapezio(){
