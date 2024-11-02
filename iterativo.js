@@ -10,8 +10,8 @@ window.iterativo = {
     let I1 = 0, I2 = 0, I3 = 0, I4 = 0, I5 = 0;
     const maxIter = 5000;
     const tol = 1e-8;
-    const omega = 0.7; // Fator de relaxação reduzido
-    const limite = 1e6; // Limite de estabilidade
+    const omega = 0.7;
+    const limite = 1e6;
     let convergiu = false;
 
     for (let iter = 0; iter < maxIter; iter++) {
@@ -54,7 +54,7 @@ window.iterativo = {
       };
     }
   },
-  
+
   limparGaussSeidel: function() {
     document.getElementById("E").value = '';
     document.getElementById("R1").value = '';
