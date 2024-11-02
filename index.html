@@ -26,11 +26,27 @@
         </section>
 
         <section>
+            <h2>Métodos Iterativos</h2><br>
+            <label for="E">Tensão (E):</label>
+            <input type="number" id="E" required><br><br>
+            <label for="R1">Resistência R1:</label>
+            <input type="number" id="R1" required><br><br>
+            <label for="R2">Resistência R2:</label>
+            <input type="number" id="R2" required><br><br>
+            <label for="R3">Resistência R3:</label>
+            <input type="number" id="R3" required><br><br>
+            <label for="R4">Resistência R4:</label>
+            <input type="number" id="R4" required><br><br>
+            <label for="R5">Resistência R5:</label>
+            <input type="number" id="R5" required><br><br>
 
-            <h2>Métodos Iterativos</h2>
-
-
-
+            <div class="button-group">
+                <button type="button" onclick="calcularGaussSeidel()">Calcular Correntes</button>
+                <button type="button" onclick="limparGaussSeidel()" class="limpar-botao">Limpar</button>
+            </div>
+            <div class="resultado-metodo-iterativo">
+                <p id="resultado-iterativo"></p><br>
+            </div>
         </section>
 
         <section>
@@ -153,6 +169,27 @@
 
             }
         </script>
+
+    <script src="iterativo.js"></script>
+    <script>
+        function calcularGaussSeidel() {
+        const resultado = iterativo.calcularGaussSeidel();
+        if (resultado.erro) {
+            document.getElementById("resultado-iterativo").textContent = resultado.erro;
+        } else {
+            document.getElementById("resultado-iterativo").innerHTML = `
+            Correntes:<br>
+            I1 = ${resultado.I1} A<br>
+            I2 = ${resultado.I2} A<br>
+            I3 = ${resultado.I3} A<br>
+            I4 = ${resultado.I4} A<br>
+            I5 = ${resultado.I5} A<br>
+            `;
+        }
+}
+    </script>
+
+        
     </body>
 
 </html>
