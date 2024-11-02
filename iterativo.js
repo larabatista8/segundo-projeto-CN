@@ -23,16 +23,11 @@ window.iterativo = {
       I4 = (1 - omega) * I4 + omega * (-R3 * I3 + R5 * I5) / R4;
       I5 = (1 - omega) * I5 + omega * (R1 * I1 + R2 * I2) / R5;
 
-      // Verificar limites para impedir estouro numérico
       if (Math.abs(I1) > limite || Math.abs(I2) > limite || Math.abs(I3) > limite || Math.abs(I4) > limite || Math.abs(I5) > limite) {
         console.error("Valores das correntes atingiram o limite de estabilidade.");
         return { erro: "O método divergiu devido à instabilidade numérica." };
       }
 
-      // Log para diagnóstico
-      console.log(`Iteração ${iter + 1}: I1 = ${I1.toFixed(6)}, I2 = ${I2.toFixed(6)}, I3 = ${I3.toFixed(6)}, I4 = ${I4.toFixed(6)}, I5 = ${I5.toFixed(6)}`);
-
-      // Critério de convergência
       if (
         Math.abs(I1 - I1_old) < tol &&
         Math.abs(I2 - I2_old) < tol &&
@@ -58,5 +53,15 @@ window.iterativo = {
         erro: "O método não convergiu."
       };
     }
+  },
+  
+  limparGaussSeidel: function() {
+    document.getElementById("E").value = '';
+    document.getElementById("R1").value = '';
+    document.getElementById("R2").value = '';
+    document.getElementById("R3").value = '';
+    document.getElementById("R4").value = '';
+    document.getElementById("R5").value = '';
+    document.getElementById("resultado-iterativo").textContent = '';
   }
 };
