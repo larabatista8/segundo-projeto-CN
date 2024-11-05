@@ -17,7 +17,7 @@
 <br><br>    <input type="number" id="a31" required>.x +  <input type="number" id="a32" required>.y+  <input type="number" id="a33" required>.z =  <input type="number" id="a34" required> 
             <div class="button-group">
                 <button type="button" onclick="executaGauss()" >Calcular</button>
-                <button type="button" onclick="iterativo.limparGaussSeidel()" class="limpar-botao">
+                <button type="button" onclick="limparGuass()" class="limpar-botao">
                     <i class="fas fa-broom"></i> Limpar
                 </button>
             </div>
@@ -103,22 +103,22 @@
         <section>
             <h2>Integração Numérica</h2> <br>
             <div class="form-integracao">
-                <p>Intervalo:</p>
+                <p>Intervalo:</p> <br><br>
                 <label for="x1">x1:</label>
                 <input type="number" id="x1"  required>
                 <label for="x5">x5:</label>
-                <input type="number" id="x5"  required>
+                <input type="number" id="x5"  required> <br><br>
                 <p>Valores de f(x):</p>
                 <label for="fx1">f(x1):</label>
-                <input type="number" id="fx1"  required>
+                <input type="number" id="fx1"  required> <br><br>
                 <label for="fx2">f(x2):</label>
-                <input type="number" id="fx2"  required>
+                <input type="number" id="fx2"  required> <br><br>
                 <label for="fx3">f(x3):</label>
-                <input type="number" id="fx3"  required> <br> <br>
+                <input type="number" id="fx3"  required> <br><br>
                 <label for="fx4">f(x4):</label>
-                <input type="number" id="fx4"  required>
+                <input type="number" id="fx4"  required> <br><br>
                 <label for="fx5">f(x5):</label>
-                <input type="number" id="fx5"  required>
+                <input type="number" id="fx5"  required> <br><br>
                 <div  class="button-group">
                 <button type="button" onclick="trapezio()">Trapézio</button>
                 <button type="button" onclick="simpson()">Simpson</button>
