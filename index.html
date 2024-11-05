@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <title> Calculo Numérico</title>
     </head>
 
@@ -16,7 +17,9 @@
 <br><br>    <input type="number" id="a31" required>.x +  <input type="number" id="a32" required>.y+  <input type="number" id="a33" required>.z =  <input type="number" id="a34" required> 
             <div class="button-group">
                 <button type="button" onclick="executaGauss()" >Calcular</button>
-                <button type="button" onclick="iterativo.limparGaussSeidel()" class="limpar-botao">Limpar</button>
+                <button type="button" onclick="iterativo.limparGaussSeidel()" class="limpar-botao">
+                    <i class="fas fa-broom"></i> Limpar
+                </button>
             </div>
             <div class="resultado-metodo-direto">
                 <p id="mensagem-erro-gauss"></p>
@@ -42,8 +45,10 @@
 
             <div class="button-group">
                 <button type="button" onclick="calcularGaussSeidel()">Calcular Correntes</button>
-                <button type="button" onclick="limparGaussSeidel()" class="limpar-botao">Limpar</button>
-            </div>
+                <button type="button" onclick="limparGaussSeidel()" class="limpar-botao">
+                    <i class="fas fa-broom"></i> Limpar
+                </button>
+                        </div>
             <div class="resultado-metodo-iterativo">
                 <p id="resultado-iterativo"></p><br>
             </div>
@@ -51,9 +56,47 @@
         
         <section>
 
-            <h2>Interpolação Polinomial </h2>
+            <h2>Interpolação Polinomial</h2>
+            <label for="i1">Corrente i1:</label>
+            <input type="number" step="any" id="i1" required>
+            <label for="v1">Voltagem V1:</label>
+            <input type="number" step="any" id="v1" required><br><br>
+            
+            <label for="i2">Corrente i2:</label>
+            <input type="number" step="any" id="i2" required>
+            <label for="v2">Voltagem V2:</label>
+            <input type="number" step="any" id="v2" required><br><br>
+            
+            <label for="i3">Corrente i3:</label>
+            <input type="number" step="any" id="i3" required>
+            <label for="v3">Voltagem V3:</label>
+            <input type="number" step="any" id="v3" required><br><br>
+            
+            <label for="i4">Corrente i4:</label>
+            <input type="number" step="any" id="i4" required>
+            <label for="v4">Voltagem V4:</label>
+            <input type="number" step="any" id="v4" required><br><br>
+            
+            <label for="i5">Corrente i5:</label>
+            <input type="number" step="any" id="i5" required>
+            <label for="v5">Voltagem V5:</label>
+            <input type="number" step="any" id="v5" required><br><br>
+            
+            <label for="iTarget">Corrente i (para estimar V):</label>
+            <input type="number" step="any" id="iTarget" required><br><br>
 
+            <div class="button-group">
+                <button type="button" onclick="interpolacaoLagrange()">Interpolação de Lagrange</button>
+                <button type="button" onclick="interpolacaoNewton()">Interpolação de Newton</button>
+                <button class="limpar-botao" onclick="limparInterpolacao()">
+                    <i class="fas fa-broom"></i> Limpar
+                </button>
+                </div>
 
+            <div class="resultado-interpolacao">
+                <p id="resultado-lagrange"></p>
+                <p id="resultado-newton"></p>
+            </div>
 
         </section>
 
@@ -79,8 +122,10 @@
                 <div  class="button-group">
                 <button type="button" onclick="trapezio()">Trapézio</button>
                 <button type="button" onclick="simpson()">Simpson</button>
-                <button type="button" onclick="limparinteg()" class="limpar-botao">Limpar</button>
-                </div>
+                <button type="button" onclick="limparinteg()" class="limpar-botao">
+                    <i class="fas fa-broom"></i> Limpar
+                </button>
+                                </div>
                 <div class="resultado-integracao">
                     <p id="resultado-trapezio"></p>
                     <p id="resultado-simpson"></p>
@@ -92,7 +137,81 @@
     </div>
 
 
+    <script>
+        function obterValores() {
+            return {
+                i: [
+                    parseFloat(document.getElementById("i1").value),
+                    parseFloat(document.getElementById("i2").value),
+                    parseFloat(document.getElementById("i3").value),
+                    parseFloat(document.getElementById("i4").value),
+                    parseFloat(document.getElementById("i5").value)
+                ],
+                V: [
+                    parseFloat(document.getElementById("v1").value),
+                    parseFloat(document.getElementById("v2").value),
+                    parseFloat(document.getElementById("v3").value),
+                    parseFloat(document.getElementById("v4").value),
+                    parseFloat(document.getElementById("v5").value)
+                ],
+                iTarget: parseFloat(document.getElementById("iTarget").value)
+            };
+        }
 
+        function interpolacaoLagrange() {
+            const { i, V, iTarget } = obterValores();
+            let result = 0;
+
+            for (let j = 0; j < i.length; j++) {
+                let termo = V[j];
+                for (let k = 0; k < i.length; k++) {
+                    if (k !== j) {
+                        termo *= (iTarget - i[k]) / (i[j] - i[k]);
+                    }
+                }
+                result += termo;
+            }
+
+            document.getElementById("resultado-lagrange").textContent = `Resultado da Interpolação de Lagrange: V ≈ ${result.toFixed(4)}`;
+        }
+
+        function interpolacaoNewton() {
+            const { i, V, iTarget } = obterValores();
+            const n = i.length;
+            let coeficientes = [...V];
+
+            // Calcula os coeficientes de diferenças divididas
+            for (let j = 1; j < n; j++) {
+                for (let k = n - 1; k >= j; k--) {
+                    coeficientes[k] = (coeficientes[k] - coeficientes[k - 1]) / (i[k] - i[k - j]);
+                }
+            }
+
+            // Avaliação do polinômio de Newton
+            let result = coeficientes[n - 1];
+            for (let j = n - 2; j >= 0; j--) {
+                result = result * (iTarget - i[j]) + coeficientes[j];
+            }
+
+            document.getElementById("resultado-newton").textContent = `Resultado da Interpolação de Newton: V ≈ ${result.toFixed(4)}`;
+        }
+
+        function limparInterpolacao() {
+            document.getElementById("i1").value = '';
+            document.getElementById("v1").value = '';
+            document.getElementById("i2").value = '';
+            document.getElementById("v2").value = '';
+            document.getElementById("i3").value = '';
+            document.getElementById("v3").value = '';
+            document.getElementById("i4").value = '';
+            document.getElementById("v4").value = '';
+            document.getElementById("i5").value = '';
+            document.getElementById("v5").value = '';
+            document.getElementById("iTarget").value = '';
+            document.getElementById("resultado-lagrange").textContent = '';
+            document.getElementById("resultado-newton").textContent = '';
+        }
+    </script>
     
         <script src="gauss.js"></script>
 
