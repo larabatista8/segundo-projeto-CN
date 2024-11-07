@@ -41,13 +41,13 @@ window.iterativo = {
 
     // Matriz de coeficientes do sistema de equações
     const coeficientes = [
-      [R1, -R2, 0, -R4, 0],
-      [-R1, R2, 0, 0, -R5],
+      [-R1, R2, 0, 0, R5],
       [0, -R2, R3, 0, -R5],
-      [0, 0, -R3, R4, 0],
-      [R1, R2, 0, 0, -R5]
+      [R1, 0, 0, R4, 0],
+      [1, -1, 0, 0, -1],
+      [0, 0, -1, 1, -1]
     ];
- 
+
     // Verificar critérios de convergência antes de prosseguir
     if (!this.verificarDominanciaDiagonal(coeficientes) && !this.verificarSassenfeld(coeficientes)) {
       return { erro: "O sistema não atende aos critérios de convergência." };
@@ -68,7 +68,7 @@ window.iterativo = {
       I2 = (1 - omega) * I2 + omega * (E - R1 * I1) / R2;
       I3 = (1 - omega) * I3 + omega * (R2 * I2 + R5 * I5) / R3;
       I4 = (1 - omega) * I4 + omega * (R3 * I3) / R4;
-      I5 = I1 - I2;
+      I5 = (1 - omega) * I5 + omega * I1 - I2;
 
       // Verificação de limite de estabilidade
       if (Math.abs(I1) > limite || Math.abs(I2) > limite || Math.abs(I3) > limite || Math.abs(I4) > limite || Math.abs(I5) > limite) {
@@ -90,17 +90,12 @@ window.iterativo = {
     }
 
     if (convergiu) {
-      return {
-        I1: I1.toFixed(6),
-        I2: I2.toFixed(6),
-        I3: I3.toFixed(6),
-        I4: I4.toFixed(6),
-        I5: I5.toFixed(6)
-      };
+      document.getElementById("resultado-iterativo").textContent = `
+        I1 = ${I1.toFixed(6)}, I2 = ${I2.toFixed(6)},
+        I3 = ${I3.toFixed(6)}, I4 = ${I4.toFixed(6)}, I5 = ${I5.toFixed(6)}
+      `;
     } else {
-      return {
-        erro: "O método não convergiu."
-      };
+      document.getElementById("resultado-iterativo").textContent = "O método não convergiu.";
     }
   },
 
