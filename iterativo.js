@@ -39,18 +39,15 @@ window.iterativo = {
     const R4 = parseFloat(document.getElementById("R4").value);
     const R5 = parseFloat(document.getElementById("R5").value);
 
-    // Matriz de coeficientes do sistema de equações
     const coeficientes = [
-      [-R1, R2, 0, 0, R5],
-      [0, -R2, R3, 0, -R5],
+      [R1, R2, 0, 0, R5],
+      [0, 0, R3, -R4, -R5],
       [R1, 0, 0, R4, 0],
-      [1, -1, 0, 0, -1],
-      [0, 0, -1, 1, -1]
     ];
 
-    // Verificar critérios de convergência antes de prosseguir
     if (!this.verificarDominanciaDiagonal(coeficientes) && !this.verificarSassenfeld(coeficientes)) {
-      return { erro: "O sistema não atende aos critérios de convergência." };
+      document.getElementById("resultado-iterativo").textContent = "O sistema não atende aos critérios de convergência.";
+      return;
     }
 
     let I1 = 0, I2 = 0, I3 = 0, I4 = 0, I5 = 0;
@@ -63,20 +60,18 @@ window.iterativo = {
     for (let iter = 0; iter < maxIter; iter++) {
       let I1_old = I1, I2_old = I2, I3_old = I3, I4_old = I4, I5_old = I5;
 
-      // Atualização das correntes usando as equações do sistema
-      I1 = (1 - omega) * I1 + omega * (E - R4 * I4) / R1;
-      I2 = (1 - omega) * I2 + omega * (E - R1 * I1) / R2;
-      I3 = (1 - omega) * I3 + omega * (R2 * I2 + R5 * I5) / R3;
-      I4 = (1 - omega) * I4 + omega * (R3 * I3) / R4;
-      I5 = (1 - omega) * I5 + omega * I1 - I2;
+      I1 = (1 - omega) * I1 + omega * (E - R2 * I2 - R5 * I5) / R1;
+      I2 = (1 - omega) * I2 + omega * (E - R1 * I1 - R5 * I5) / R2;
+      I3 = (1 - omega) * I3 + omega * (R4 * I4 - R5 * I5) / R3;
+      I4 = (1 - omega) * I4 + omega * (E - R1 * I1) / R4;
+      I5 = (1 - omega) * I5 + omega * (I4 * R4 - I3 * R3) / R5;
 
-      // Verificação de limite de estabilidade
       if (Math.abs(I1) > limite || Math.abs(I2) > limite || Math.abs(I3) > limite || Math.abs(I4) > limite || Math.abs(I5) > limite) {
         console.error("Valores das correntes atingiram o limite de estabilidade.");
-        return { erro: "O método divergiu devido à instabilidade numérica." };
+        document.getElementById("resultado-iterativo").textContent = "O método divergiu devido à instabilidade numérica.";
+        return;
       }
 
-      // Verificação da convergência
       if (
         Math.abs(I1 - I1_old) < tol &&
         Math.abs(I2 - I2_old) < tol &&
