@@ -55,49 +55,47 @@
         </section>
         
         <section>
-
             <h2>Interpolação Polinomial</h2>
             <label for="i1">Corrente i1:</label>
             <input type="number" step="any" id="i1" required>
             <label for="v1">Voltagem V1:</label>
             <input type="number" step="any" id="v1" required><br><br>
-            
+        
             <label for="i2">Corrente i2:</label>
             <input type="number" step="any" id="i2" required>
             <label for="v2">Voltagem V2:</label>
             <input type="number" step="any" id="v2" required><br><br>
-            
+        
             <label for="i3">Corrente i3:</label>
             <input type="number" step="any" id="i3" required>
             <label for="v3">Voltagem V3:</label>
             <input type="number" step="any" id="v3" required><br><br>
-            
+        
             <label for="i4">Corrente i4:</label>
             <input type="number" step="any" id="i4" required>
             <label for="v4">Voltagem V4:</label>
             <input type="number" step="any" id="v4" required><br><br>
-            
+        
             <label for="i5">Corrente i5:</label>
             <input type="number" step="any" id="i5" required>
             <label for="v5">Voltagem V5:</label>
             <input type="number" step="any" id="v5" required><br><br>
-            
+        
             <label for="iTarget">Corrente i (para estimar V):</label>
             <input type="number" step="any" id="iTarget" required><br><br>
-
+        
             <div class="button-group">
                 <button type="button" onclick="interpolacaoLagrange()">Interpolação de Lagrange</button>
                 <button type="button" onclick="interpolacaoNewton()">Interpolação de Newton</button>
                 <button class="limpar-botao" onclick="limparInterpolacao()">
                     <i class="fas fa-broom"></i> Limpar
                 </button>
-                </div>
-
+            </div>
+        
             <div class="resultado-interpolacao">
                 <p id="resultado-lagrange"></p>
                 <p id="resultado-newton"></p>
             </div>
-
         </section>
 
         <section>
@@ -139,63 +137,79 @@
 
     <script>
         function obterValores() {
-            return {
-                i: [
-                    parseFloat(document.getElementById("i1").value),
-                    parseFloat(document.getElementById("i2").value),
-                    parseFloat(document.getElementById("i3").value),
-                    parseFloat(document.getElementById("i4").value),
-                    parseFloat(document.getElementById("i5").value)
-                ],
-                V: [
-                    parseFloat(document.getElementById("v1").value),
-                    parseFloat(document.getElementById("v2").value),
-                    parseFloat(document.getElementById("v3").value),
-                    parseFloat(document.getElementById("v4").value),
-                    parseFloat(document.getElementById("v5").value)
-                ],
-                iTarget: parseFloat(document.getElementById("iTarget").value)
-            };
+            const i = [
+                parseFloat(document.getElementById("i1").value),
+                parseFloat(document.getElementById("i2").value),
+                parseFloat(document.getElementById("i3").value),
+                parseFloat(document.getElementById("i4").value),
+                parseFloat(document.getElementById("i5").value)
+            ];
+            
+            const V = [
+                parseFloat(document.getElementById("v1").value),
+                parseFloat(document.getElementById("v2").value),
+                parseFloat(document.getElementById("v3").value),
+                parseFloat(document.getElementById("v4").value),
+                parseFloat(document.getElementById("v5").value)
+            ];
+            
+            const iTarget = parseFloat(document.getElementById("iTarget").value);
+    
+            if (i.includes(NaN) || V.includes(NaN) || isNaN(iTarget)) {
+                alert("Por favor, preencha todos os campos corretamente.");
+                return null;  // Retorna nulo para interromper a execução caso haja valores inválidos
+            }
+    
+            return { i, V, iTarget };
         }
-
+    
+        // Função de interpolação de Lagrange para estimar o valor da voltagem V
         function interpolacaoLagrange() {
-            const { i, V, iTarget } = obterValores();
-            let result = 0;
-
+            const valores = obterValores();
+            if (!valores) return;  // Interrompe a função se valores for nulo 
+    
+            const { i, V, iTarget } = valores;
+            let result = 0;  // Inicializa a variável para armazenar o resultado da interpolação
+    
+            // Calcula o polinômio de Lagrange
             for (let j = 0; j < i.length; j++) {
-                let termo = V[j];
+                let termo = V[j];  // Começa o termo com o valor de V correspondente
                 for (let k = 0; k < i.length; k++) {
                     if (k !== j) {
-                        termo *= (iTarget - i[k]) / (i[j] - i[k]);
+                        termo *= (iTarget - i[k]) / (i[j] - i[k]);  // Calcula o termo de Lagrange para o índice j
                     }
                 }
-                result += termo;
+                result += termo;  // Soma o termo ao resultado final
             }
-
+    
             document.getElementById("resultado-lagrange").textContent = `Resultado da Interpolação de Lagrange: V ≈ ${result.toFixed(4)}`;
         }
-
+    
+        // Função de interpolação de Newton para estimar o valor da voltagem V
         function interpolacaoNewton() {
-            const { i, V, iTarget } = obterValores();
-            const n = i.length;
-            let coeficientes = [...V];
-
-            // Calcula os coeficientes de diferenças divididas
+            const valores = obterValores();
+            if (!valores) return;  // Interrompe a função se valores for nulo
+    
+            const { i, V, iTarget } = valores;
+            const n = i.length;  // Define o número de pontos
+            let coeficientes = [...V];  // Copia os valores de V para calcular os coeficientes de diferenças divididas
+    
+            // Calcula os coeficientes das diferenças divididas 
             for (let j = 1; j < n; j++) {
                 for (let k = n - 1; k >= j; k--) {
                     coeficientes[k] = (coeficientes[k] - coeficientes[k - 1]) / (i[k] - i[k - j]);
                 }
             }
-
-            // Avaliação do polinômio de Newton
-            let result = coeficientes[n - 1];
+    
+            // Avaliação do polinômio usando os coeficientes calculados
+            let result = coeficientes[n - 1];  // Inicializa o resultado com o último coeficiente
             for (let j = n - 2; j >= 0; j--) {
-                result = result * (iTarget - i[j]) + coeficientes[j];
+                result = result * (iTarget - i[j]) + coeficientes[j];  // Calcula o polinômio de Newton para iTarget
             }
-
+    
             document.getElementById("resultado-newton").textContent = `Resultado da Interpolação de Newton: V ≈ ${result.toFixed(4)}`;
         }
-
+    
         function limparInterpolacao() {
             document.getElementById("i1").value = '';
             document.getElementById("v1").value = '';
@@ -208,6 +222,7 @@
             document.getElementById("i5").value = '';
             document.getElementById("v5").value = '';
             document.getElementById("iTarget").value = '';
+            
             document.getElementById("resultado-lagrange").textContent = '';
             document.getElementById("resultado-newton").textContent = '';
         }
