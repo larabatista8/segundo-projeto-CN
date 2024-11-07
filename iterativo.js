@@ -45,6 +45,10 @@ window.iterativo = {
       [R1, 0, 0, R4, 0],
     ];
 
+        if (!this.verificarDominanciaDiagonal(coeficientes) && !this.verificarSassenfeld(coeficientes)) {
+      document.getElementById("resultado-iterativo").textContent = "O sistema não atende aos critérios de convergência.";
+      return;
+    }
 
     let I1 = 0, I2 = 0, I3 = 0, I4 = 0, I5 = 0; I6 = 0;
     const maxIter = 5000;
